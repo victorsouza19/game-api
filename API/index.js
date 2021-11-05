@@ -1,5 +1,8 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
+
+app.use(cors());
 
 // configurando o parser
 app.use(express.urlencoded({extended: false}));
