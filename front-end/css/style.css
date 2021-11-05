@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap');
+
 :root{
-  --background: #050805;
+  --background: #eeeeee;
+  --text-default: #050805;
   --card: #333F44;
   --card-dark: #1e2427;
-  --card-light: #CACACB;
-  --card-hover: #0BF300;
-
+  --card-light: #fff;
+  --btn: #f30049;
 }
 
 * {
@@ -14,15 +16,16 @@
 }
 
 html{
-  font-size: 87,5%;
+  font-size: 62,5%;
 }
 
 body{
-  color: #fff;
-  background-color: var(--background);
+  color:var(--text-default);
+  background: var(--background);
+  font-family: 'Lato', sans-serif;
 
   width: 100vw;
-  height: 100vh;
+  height: 100%;
 }
 
 .container{
@@ -35,51 +38,142 @@ body{
   width: 100%;
 }
 
+.title{
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .card{
   display: flex;
   flex-direction: column;
+  
+  width: 95%;
+  padding: 1rem;
+  margin: 2rem auto;
+  border-radius: 0.5rem;
+  background: var(--card-light);
+}
+
+.game-list{
   align-items: center;
   justify-content: center;
-
-  width: 95%;
-  height: 60%;
-  margin-top: 4rem;
-
-  border-radius: 0.5rem;
-  background: linear-gradient(10deg, var(--card-dark), var(--card));
 }
 
 h4{
   font-size: 1.5rem;
   text-transform: uppercase;
+  padding: 1rem;
 }
 
 #games{
   display: flex;
   flex-direction: column;
   
-  margin: 4rem 1rem;
+  font-size: 1.2rem;
+  list-style-type: none;
+}
+
+#games li span{
+  color: var(--btn);
+  font-weight: 700;
+  padding: 0 0.5rem;
 }
 
 #games li{
-  padding: 1rem 0;
+  padding: 2rem 0;
+
+  display: flex;
+  flex-direction: column;
 }
 
-#games button{
-  background-color: var(--card-hover);
+ button{
+  color: var(--card-light);
+  background-color: var(--btn);
 
   border: none;
   border-radius: 0.4rem;
-  padding: 0.5rem;
+  margin: 0.5rem 0 0 0 ;
+  padding: 0.8rem;
 }
 
+button + button{
+  background: none;
+  border: 0.1rem solid var(--btn);
+  color: var(--btn);
+}
 
-/* por enquanto */
+.game-content{
+  display: flex;
+  align-items: center;
 
-/* .card:nth-of-type(3){
+  margin-bottom: 0.5rem;
+}
+.game-content img{
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 25%;
+  margin: 0 0.5rem 0 0;
+}
+
+.game-new{
+  align-items: center;
+  justify-content: space-evenly;
+
+}
+
+input{
+  width: 100%;
+  border: 1px solid var(--btn);
+  border-radius: 0.4rem;
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+}
+
+input:last-child{
+  margin-bottom: 2rem;
+}
+
+button{
+  width: 100%;
+}
+
+#new{
   display: none;
 }
 
-.card:nth-of-type(2){
+#edit{
   display: none;
-} */
+}
+
+/*
+MEDIA QUERIES: 
+
+320px — 480px: Mobile devices
+481px — 768px: iPads, Tablets
+769px — 1024px: Small screens, laptops
+1025px — 1200px: Desktops, large screens
+1201px and more —  Extra large screens, TV
+
+*/
+
+@media screen and (min-width: 481px) and (max-width: 768px){
+
+  html{
+    font-size: 80%;
+  }
+  
+}
+
+@media screen and (min-width: 769px) {
+
+  html{
+    font-size: 100%;
+  }
+
+  .card{
+    width: 80%;
+  }
+
+}

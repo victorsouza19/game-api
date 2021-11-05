@@ -10,36 +10,52 @@
 </head>
 <body>
   <div class="container">
-    <h1>Loja de Games</h1>
-
-    <div class="card game-list">
-      <h4>Lista de games</h4>
+    <div class="title">
+      <h1>Loja de Games</h1>
+      <button onclick="newGame()">New Game</button>
+    </div>
+    
+    <div id="list" class="card game-list">
       <ul id="games"></ul>
     </div>
 
-    <div class="card game-new">
+    <div id="new" class="card game-new">
       <h4>Novo game</h4>
-      <input type="text" name="title" id="title" placeholder="Título">
-      <input type="number" name="year" id="year" placeholder="Ano">
-      <input type="number" name="price" id="price" placeholder="Preço">
-      <br>
+      <div class="input-game">
+        <input type="text" name="title" id="title" placeholder="Título">
+        <input type="number" name="year" id="year" placeholder="Ano">
+        <input type="number" name="price" id="price" placeholder="Preço">
+      </div>
       <button type="button" onclick="createGame()">Criar</button>
+      <button type="button" onclick="goBack()">Voltar</button>
     </div>
 
-    <div class="card game-edit">
+    <div id="edit" class="card game-edit">
       <h4>Editar game</h4>
-      <input type="text" name="idEdit" id="idEdit" placeholder="ID" readonly>
-      <input type="text" name="titleEdit" id="titleEdit" placeholder="Título">
-      <input type="number" name="yearEdit" id="yearEdit" placeholder="Ano">
-      <input type="number" name="priceEdit" id="priceEdit" placeholder="Preço">
-      <br>
+        <div class="input-game">
+        <input type="text" name="idEdit" id="idEdit" placeholder="ID" readonly>
+        <input type="text" name="titleEdit" id="titleEdit" placeholder="Título">
+        <input type="number" name="yearEdit" id="yearEdit" placeholder="Ano">
+        <input type="number" name="priceEdit" id="priceEdit" placeholder="Preço">
+      </div>
       <button type="button" onclick="updateGame()">Editar</button>
+      <button type="button" onclick="goBack()">Voltar</button>
     </div>
   </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
 
+  function goBack(){
+    location.reload();
+  }
+
+  function newGame(){
+    document.getElementById("new").style.display = "block";
+    document.getElementById("list").style.display = "none";
+    document.getElementById("edit").style.display = "none";
+  }
+  
   function createGame(){
     let titleInput = document.getElementById("title");
     let yearInput = document.getElementById("year");
@@ -85,6 +101,10 @@
     document.getElementById("yearEdit").value = gameData.year;
     document.getElementById("priceEdit").value = gameData.price;
 
+    document.getElementById("new").style.display = "none";
+    document.getElementById("list").style.display = "none";
+    document.getElementById("edit").style.display = "block";
+
   }
 
   function updateGame(){
@@ -109,6 +129,7 @@
 
     })
   }
+  
   axios.get("http://localhost:5000/games").then(res => {
 
     // armazendando o array de games 
@@ -123,14 +144,8 @@
       // criando um elemento li 
       let item = document.createElement("li");
 
-      item.setAttribute("data-id", game.id);
-      item.setAttribute("data-title", game.title);
-      item.setAttribute("data-year", game.year);
-      item.setAttribute("data-price", game.price);
-
-
       // inserindo o titulo do game dentro do elemento li
-      item.innerHTML = `${game.id} - ${game.title} (${game.year}): R$${game.price}`;
+      item.innerHTML = `<div class="game-content"><img src="https://source.unsplash.com/featured/?game/${game.id}"><div class="game-text"><div><span>${game.id}</span><strong>${game.title} (${game.year})</strong></div><span class="price">R$${game.price}</span>`;
 
       // criando botão de deletar
       let deleteButton = document.createElement("button");
@@ -151,8 +166,9 @@
       });
 
       // adicionando os botões dentro do item
-      item.appendChild(deleteButton);
       item.appendChild(editButton);
+      item.appendChild(deleteButton);
+
 
       // inserindo o elemento li dentro da lista (ul)
       list.appendChild(item);
