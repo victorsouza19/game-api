@@ -41,6 +41,20 @@ let database = {
       year: 2019,
       price: 199
     }
+  ],
+  users: [
+    {
+      id: 1,
+      name: "Victor",
+      email: "victor@email.com",
+      password: "123456"
+    },
+    {
+      id: 2,
+      name: "Bruna",
+      email: "bruna@email.com",
+      password: "654321"
+    }
   ]
 }
 
@@ -176,6 +190,18 @@ app.put("/game/:id", (req, res) => {
 
     }
   }
+});
+
+app.post("/auth", (req, res) => {
+  const {email, password} = req.body;
+
+  if(email != undefined){
+
+  }else{
+    res.status = (400);
+    res.json({err: "E-mail ou senha inválidos!"});
+  }
+
 });
 
 
