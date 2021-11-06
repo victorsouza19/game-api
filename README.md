@@ -1,7 +1,7 @@
 # Game API
 
 ![GitHub language count](https://img.shields.io/github/languages/count/victorsouza19/game-api?style=for-the-badge)
-![Bitbucket open issues](https://img.shields.io/bitbucket/issues/victorsouza19//game-api?style=for-the-badge)
+![Bitbucket open issues](https://img.shields.io/bitbucket/issues/victorsouza19/game-api?style=for-the-badge)
 ![Followers](https://img.shields.io/github/followers/victorsouza19?style=for-the-badge)
 
 > Minha primeira API seguindo a arquitetura REST (:
