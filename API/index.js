@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const Game = require("./database/Games");
+const User = require("./database/Users");
+const connection = require("./database/database");
 
 app.use(cors());
 
@@ -8,60 +11,29 @@ app.use(cors());
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
-// banco de dados fake de games
-let database = {
-  games: [
-    {
-      id: 1,
-      title: 'Grand Theft Auto 5',
-      year: 2014,
-      price: 120
-    },
-    {
-      id: 2,
-      title: 'Control',
-      year: 2016,
-      price: 79
-    },
-    {
-      id: 3,
-      title: 'Minecraft',
-      year: 2012,
-      price: 99
-    },
-    {
-      id: 4,
-      title: 'Fortnite',
-      year: 2018,
-      price: 0
-    },
-    {
-      id: 5,
-      title: 'Call of Duty Modern Warfare',
-      year: 2019,
-      price: 199
-    }
-  ],
-  users: [
-    {
-      id: 1,
-      name: "Victor",
-      email: "victor@email.com",
-      password: "123456"
-    },
-    {
-      id: 2,
-      name: "Bruna",
-      email: "bruna@email.com",
-      password: "654321"
-    }
-  ]
-}
+
+// database connect
+connection
+  .authenticate()
+  .then(() => {
+    console.log("Database connected!");
+  })
+  .catch(err => { 
+    console.log(err);
+});
 
 // rota de listagem dos games
 app.get("/games", (req, res) => {
-  res.statusCode = 200;
-  res.json(database.games);
+
+  Game.findAll({raw: true}).then(games => {
+    res.statusCode = 200;
+    res.json(games);
+
+  }).catch(err =>{
+    res.sendStatus(500);
+    console.log(err);
+  })
+    
 });
 
 // rota de listagem de UM game
@@ -74,21 +46,22 @@ app.get("/game/:id", (req, res) => {
   }else{ // senão
     let id = parseInt(req.params.id); 
 
-    //buscar no array de games o game com id da requisição
-    let game = database.games.find(game => game.id == id);
+    Game.findOne({where: {id: id}}).then(game => {
 
+      if(game != undefined){ // se o game for encontrado
+        res.statusCode = 200;
+        res.json(game);
+  
+      }else{ // se não
+        res.sendStatus(404);
+  
+      }
 
-    if(game != undefined){ // se o game for encontrado
-      res.statusCode = 200;
-      res.json(game);
-
-    }else{ // se não
-      res.sendStatus(404);
-
-    }
+    }).catch(err => {
+      res.sendStatus(500);
+      console.log(err);
+    })
   }
-
-
 });
 
 // rota de cadastro de game 
@@ -101,22 +74,24 @@ app.post("/game", (req, res) => {
 
   }else{ // senão
 
-    // pegar tamanho do array para adicionar o id de forma dinâmica considerando que os ids estão sendo inseridos em forma crescente
-    let length = parseInt(database.games.length);
-    let id = length + 1;
+    Game.create({ 
 
-    // cadastrando game
-    database.games.push({
-      id,
-      title,
-      year,
-      price
+      title: title,
+      year: year, 
+      price: price 
+
+    }).then(result => {
+        res.sendStatus(200);
+
+      }).catch(err => {
+        res.sendStatus(500);
+        console.log(err);
+
     });
-
-    res.sendStatus(200);
   }
 });
 
+// rota de delete de game
 app.delete("/game/:id", (req, res) => {
 
   if(isNaN(req.params.id)){ // se o id não for número
@@ -126,22 +101,21 @@ app.delete("/game/:id", (req, res) => {
 
     let id = parseInt(req.params.id);
 
-    // buscar no json o item com o id igual ao da requisição
-    let index = database.games.findIndex(game => game.id == id);
+    Game.destroy({where: {id: id}}).then(result => {
+      if(result == 0){
+        res.sendStatus(404);
+      }else{
+        res.sendStatus(200);
+      }
+      
 
-    
-    if(index == -1){ // se o game não for encontrado
-      res.sendStatus(404);
-
-    }else{ // senão
-      database.games.splice(index, 1); // apagar o game com o id da requisição
-
-      res.sendStatus(200);
-
-    }
+    }).catch(err => {
+      res.sendStatus(500);
+    });
   }
 });
 
+// rota de update de game
 app.put("/game/:id", (req, res) => {
 
   if(isNaN(req.params.id)){ // se o id não for número
@@ -149,17 +123,18 @@ app.put("/game/:id", (req, res) => {
 
   }else{ // senão
     let id = parseInt(req.params.id); 
+    let { title, year, price } = req.body;
 
-    //buscar no array de games o game com id da requisição
-    let game = database.games.find(game => game.id == id);
-
-
-    if(game != undefined){ // se o game for encontrado
-
-      let { title, year, price } = req.body;
 
       if(title != undefined){ // se titulo estiver preenchido
-        game.title = title;
+        Game.update({
+          title: title},{
+          where: {
+            id: id
+          } 
+        }).then().catch(err => {
+          res.sendStatus(500);
+        })
       }
 
       if(year != undefined){ // se ano estiver preenchido
@@ -168,8 +143,14 @@ app.put("/game/:id", (req, res) => {
           res.sendStatus(400);
 
         }else{
-          game.year = year;
-
+          Game.update({
+            year: year},{
+            where: {
+              id: id
+            } 
+          }).then().catch(err => {
+            res.sendStatus(500);
+          })
         }
       }
 
@@ -179,19 +160,35 @@ app.put("/game/:id", (req, res) => {
           res.sendStatus(400);
 
         }else{
-          game.price = price;
-          
+          Game.update({
+            price: price},{
+            where: {
+              id: id
+            } 
+          }).then().catch(err => {
+            res.sendStatus(500);
+          }) 
         }
       }
+
       res.sendStatus(200);
-
-    }else{ // se não
-      res.sendStatus(404);
-
-    }
   }
 });
 
+// rota de cadastro de user
+app.post("/user", (req, res) => {
+  const { name, email, password } = req.body;
+
+  User.create({name, email, password}).then(result => {
+    res.sendStatus(200);
+
+  }).catch(err => {
+     res.sendStatus(500);
+
+  });
+});
+
+// rota de autenticação
 app.post("/auth", (req, res) => {
   const {email, password} = req.body;
 
@@ -202,9 +199,9 @@ app.post("/auth", (req, res) => {
     res.json({err: "E-mail ou senha inválidos!"});
   }
 
-});
+}); 
 
-
+// colocando a API no ar
 app.listen(5000, () => {
   console.log("Api is running!");
 });
