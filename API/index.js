@@ -244,5 +244,5 @@ app.post("/auth", (req, res) => {
 
 // colocando a API no ar
 app.listen(5000, () => {
-  console.log("Api is running!");
+  console.log("API is running!");
 });

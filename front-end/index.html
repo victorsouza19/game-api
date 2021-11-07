@@ -6,17 +6,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Game-API</title>
 
+  <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
   <div class="container">
     <div class="title">
-      <h1>Loja de Games</h1>
-      <button onclick="newGame()">New Game</button>
+      <img class="logo-img"src="./img/game-api.png" alt="">
+      <button id="btn-newgame" onclick="newGame()">New Game</button>
+      <button id="logout" onclick="logout()">Sair</button>
     </div>
-    
     <div id="list" class="card game-list">
+
+      <div id="login" class="card">
+        <h2>Login</h2>
+        <input type="text" name="email" id="email" placeholder="email@email.com">
+        <input type="password" name="password" id="password" placeholder="*******">
+        <button onclick="login()">Entrar</button>
+      </div>
+
       <ul id="games"></ul>
+
     </div>
 
     <div id="new" class="card game-new">
@@ -46,6 +56,40 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
 
+  let axiosConfig = {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token")
+    }
+  }
+
+  function login(){
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+
+    axios.post("http://localhost:5000/auth", {
+      email,
+      password
+    }).then(res => {
+      let token = res.data.token;
+      localStorage.setItem("token", token);
+
+      document.getElementById("login").style.display = "none";
+      document.getElementById("logout").style.display = "block";
+      document.getElementById("btn-newgame").style.display = "block";
+      
+      axiosConfig.headers.Authorization = "Bearer " + localStorage.getItem("token");
+      location.reload();
+
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
+  function logout(){
+      localStorage.removeItem("token");
+      location.reload();
+  }
+
   function goBack(){
     location.reload();
   }
@@ -69,7 +113,7 @@
 
     console.log(game);
 
-    axios.post("http://localhost:5000/game", game).then(res => {
+    axios.post("http://localhost:5000/game", game, axiosConfig).then(res => {
       if(res.status = 200){
         alert("Game cadastrado!");
         location.reload();
@@ -82,7 +126,7 @@
 
   function deleteGame(id){
     
-    axios.delete(`http://localhost:5000/game/${id}`).then(res => {
+    axios.delete(`http://localhost:5000/game/${id}`, axiosConfig).then(res => {
       alert("Game deletado!");
       location.reload();
 
@@ -119,7 +163,7 @@
       price: priceInput
     }
 
-    axios.put(`http://localhost:5000/game/${idInput}`, game).then(res => {
+    axios.put(`http://localhost:5000/game/${idInput}`, game, axiosConfig).then(res => {
       if(res.status = 200){
         alert("Game atualizado!");
         location.reload();
@@ -130,7 +174,7 @@
     })
   }
   
-  axios.get("http://localhost:5000/games").then(res => {
+  axios.get("http://localhost:5000/games", axiosConfig).then(res =>   {
 
     // armazendando o array de games 
     let games = res.data;
@@ -176,7 +220,10 @@
 
   }).catch(err => {
     console.log(err);
-  })
+    document.getElementById("login").style.display = "block";
+    document.getElementById("btn-newgame").style.display = "none";
+    document.getElementById("logout").style.display = "none";
+  });
 
 </script>
 </html>
