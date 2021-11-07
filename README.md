@@ -30,7 +30,7 @@ Antes de começar, verifique se você atendeu aos seguintes requisitos:
 
 Para instalar a Game API, siga estas etapas:
 
-Fazer o clone do projeto e rodar o comando na pasta raiz:
+Fazer o clone do projeto e rodar o comando na pasta ./API :
 ```
 npm install
 ```
