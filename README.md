@@ -52,8 +52,6 @@ USER=user
 PASSWORD=password
 HOST=localhost
 DB_DIALECT=mysql
-
-
 ```
 <br>
 
