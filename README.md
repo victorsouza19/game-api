@@ -35,6 +35,26 @@ Fazer o clone do projeto e rodar o comando na pasta ./API :
 npm install
 ```
 
+Alterar o arquivo ./API/database/database.js com os dados do seu banco :
+```
+const connection = new Sequelize(
+  'database', //database name
+  'usuario', // database user
+  'senha', // database password
+  {
+  host: 'localhost', // host 
+  dialect: 'mysql' // tipo de linguagem do banco de dados
+});
+```
+Para criar as tabelas, basta descomentar o seguinte trecho nos arquivos ./API/database/(Users.js & Games.js) :
+```
+/* Arquivo Users.js */
+User.sync({force: false});  
+
+/* Arquivo Games.js */
+Game.sync({force: false}); 
+```
+
 
 ## ☕ Usando a Game API
 
