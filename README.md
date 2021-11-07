@@ -1,9 +1,14 @@
 # Game API
-
+<br>
+<div align="center">
+<img style="background: #fff" src="https://user-images.githubusercontent.com/71740612/140661872-95dfc13b-c98e-462b-95a3-ee870fb22663.png" alt="Game-API!">
+  
 ![GitHub language count](https://img.shields.io/github/languages/count/victorsouza19/game-api?style=for-the-badge)
 ![Bitbucket open issues](https://img.shields.io/bitbucket/issues/victorsouza19/game-api?style=for-the-badge)
 ![Followers](https://img.shields.io/github/followers/victorsouza19?style=for-the-badge)
+</div>
 
+![image](https://user-images.githubusercontent.com/71740612/140662178-be873674-054d-40ba-9d55-2e91bfd27935.png)
 > Minha primeira API seguindo a arquitetura REST (:
 
 ### Melhorias :construction:
@@ -23,7 +28,7 @@ Projeto em desenvolvimento, as próximas atualizações serão:
 Antes de começar, verifique se você atendeu aos seguintes requisitos:
 
 * Você instalou a versão mais recente do `node` 
-* Você instalou a versão mais recente do `Postman` 
+* Você instalou a versão mais recente do `Postman` (opcional, caso não utilize o front-end)
 
 
 ## 🚀 Instalando a Game API
@@ -36,16 +41,19 @@ npm install
 ```
 <br>
 
-Alterar o arquivo ./API/database/database.js com os dados do seu banco :
+Alterar o arquivo ./API/.envExample com os dados do seu banco :
 ```
-const connection = new Sequelize(
-  'database', //database name
-  'usuario', // database user
-  'senha', // database password
-  {
-  host: 'localhost', // host 
-  dialect: 'mysql' // tipo de linguagem do banco de dados
-});
+# JWT key:
+JWT_SECRET=secretpwd123
+
+# Sequelize(database) configs 
+DATABASE=database_name
+USER=user
+PASSWORD=password
+HOST=localhost
+DB_DIALECT=mysql
+
+
 ```
 <br>
 
@@ -65,6 +73,11 @@ Iniciar o servidor:
 ```
 node index.js
 ```
+
+## :bookmark_tabs: Documentação
+
+Para visualizar a documentação da API, consulte o arquivo [DOCUMENTAÇÃO](DOCUMENTATION.md).
+
 
 ## 📫 Contribuindo para a Game API
 
@@ -88,11 +101,6 @@ Como alternativa, consulte a documentação do GitHub em [como criar uma solicit
     </sub>
   </a>
 </div>
-
-
-
-## 😄 Seja um dos contribuidores<br>
-
 
 ## 📝 Licença
 
