@@ -137,3 +137,25 @@ Esse endpoint é responsável por fazer a autenticação do usuário na API e re
     }
     ```
 </details>
+      
+<details>
+<summary><strong>GET</strong> <code>/game/:id</code> :construction:</summary>
+</details>
+      
+<details>
+<summary><strong>POST</strong> <code>/game</code> :construction:</summary>
+</details>
+      
+<details>
+<summary><strong>PUT</strong> <code>/game/:id</code> :construction:</summary>
+</details>
+      
+<details>
+<summary><strong>DELETE</strong> <code>/game/:id</code> :construction:</summary>
+</details>
+       
+<details>
+<summary><strong>POST</strong> <code>/users</code> :construction:</summary>
+</details>
+      
+
