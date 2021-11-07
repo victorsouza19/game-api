@@ -10,9 +10,12 @@
 
 Projeto em desenvolvimento, as próximas atualizações serão:
 
-- [x] Adicionar comentários ao código para melhor compreensão
-- [ ] Criar um banco de dados real onde a API buscará os dados.
-- [ ] Implementar o banco de dados real com o Sequelize.
+- [x] Adicionar comentários ao código para melhor compreensão.
+- [x] Criar o front-end da aplicação para consumo da API.
+- [x] Criar um banco de dados real onde a API buscará os dados.
+- [x] Implementar o banco de dados real com o Sequelize.
+- [ ] Criar sistema de autenticação da API
+- [ ] Implementar melhorias de CSS no front-end
 
 
 ## 💻 Pré-requisitos
@@ -27,11 +30,33 @@ Antes de começar, verifique se você atendeu aos seguintes requisitos:
 
 Para instalar a Game API, siga estas etapas:
 
-Fazer o clone do projeto e rodar o comando na pasta raiz:
+Fazer o clone do projeto e rodar o comando na pasta ./API :
 ```
 npm install
 ```
+<br>
 
+Alterar o arquivo ./API/database/database.js com os dados do seu banco :
+```
+const connection = new Sequelize(
+  'database', //database name
+  'usuario', // database user
+  'senha', // database password
+  {
+  host: 'localhost', // host 
+  dialect: 'mysql' // tipo de linguagem do banco de dados
+});
+```
+<br>
+
+Para criar as tabelas, basta descomentar o seguinte trecho nos arquivos ./API/database/(Users.js & Games.js) :
+```
+/* Arquivo Users.js */
+User.sync({force: false});  
+
+/* Arquivo Games.js */
+Game.sync({force: false}); 
+```
 
 ## ☕ Usando a Game API
 
