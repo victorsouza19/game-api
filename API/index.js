@@ -5,6 +5,7 @@ const connection = require("./database/database");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 
+const auth = require("./middleware/auth");
 const Game = require("./database/Games");
 const User = require("./database/Users");
 
@@ -20,6 +21,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
 
+
 // database connect
 connection
   .authenticate()
@@ -31,7 +33,7 @@ connection
 });
 
 // rota de listagem dos games
-app.get("/games", (req, res) => {
+app.get("/games", auth, (req, res) => {
 
   Game.findAll({raw: true}).then(games => {
     res.statusCode = 200;
@@ -45,7 +47,7 @@ app.get("/games", (req, res) => {
 });
 
 // rota de listagem de UM game
-app.get("/game/:id", (req, res) => {
+app.get("/game/:id", auth, (req, res) => {
 
   
   if(isNaN(req.params.id)){ // se o id não for número
@@ -73,7 +75,7 @@ app.get("/game/:id", (req, res) => {
 });
 
 // rota de cadastro de game 
-app.post("/game", (req, res) => {
+app.post("/game", auth, (req, res) => {
   let { title, year, price } = req.body;
 
   // se o titulo for nulo ou vazio || ano ou preço não forem números
@@ -100,7 +102,7 @@ app.post("/game", (req, res) => {
 });
 
 // rota de delete de game
-app.delete("/game/:id", (req, res) => {
+app.delete("/game/:id", auth, (req, res) => {
 
   if(isNaN(req.params.id)){ // se o id não for número
     res.sendStatus(400);
@@ -124,7 +126,7 @@ app.delete("/game/:id", (req, res) => {
 });
 
 // rota de update de game
-app.put("/game/:id", (req, res) => {
+app.put("/game/:id", auth, (req, res) => {
 
   if(isNaN(req.params.id)){ // se o id não for número
     res.sendStatus(400);
@@ -183,8 +185,8 @@ app.put("/game/:id", (req, res) => {
   }
 });
 
-/* rota de cadastro de user
-app.post("/user", (req, res) => {
+// rota de cadastro de user
+app.post("/user", auth, (req, res) => {
   const { name, email, password } = req.body;
 
   User.create({name, email, password}).then(result => {
@@ -194,7 +196,7 @@ app.post("/user", (req, res) => {
      res.sendStatus(500);
 
   });
-}); */
+});
 
 // rota de autenticação
 app.post("/auth", (req, res) => {
