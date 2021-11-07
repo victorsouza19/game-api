@@ -1,0 +1,15 @@
+####################################
+# NÃO SE ESQUEÇA DE RENOMEAR O ARQUIVO PARA ".env"
+# APÓS CONFIGURAR SUAS VARIÁVEIS.
+####################################
+
+# JWT key:
+JWT_SECRET=secretpwd123
+
+# Sequelize(database) configs 
+DATABASE=database_name
+USER=user
+PASSWORD=password
+HOST=localhost
+DB_DIALECT=mysql
+

@@ -1,12 +1,13 @@
 const Sequelize = require('sequelize');
+require('dotenv').config();
 
 const connection = new Sequelize(
-  'gameapi', //database name
-  'root', // database user
-  'admin', // database password
+  process.env.DATABASE, //database name
+  process.env.USER, // database user
+  process.env.PASSWORD, // database password
   {
-  host: 'localhost', // host 
-  dialect: 'mysql' // tipo de linguagem do banco de dados
+  host: process.env.HOST, // host 
+  dialect: process.env.DB_DIALECT // tipo de linguagem do banco de dados
   });
 
 module.exports = connection;

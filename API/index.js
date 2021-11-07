@@ -1,16 +1,21 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const Game = require("./database/Games");
-const User = require("./database/Users");
 const connection = require("./database/database");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 
-const privateJWT = "9fa8c4f8d92e0eb61855";
+const Game = require("./database/Games");
+const User = require("./database/Users");
 
+
+// dotenv files change
+dotenv.config({ path: './.env'});
+
+// using cors to http requests
 app.use(cors());
 
-// configurando o parser
+// configuring parser
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
@@ -202,7 +207,7 @@ app.post("/auth", (req, res) => {
 
         if(user.password == password){ // se senhas coincidirem
 
-          jwt.sign({id: user.id, email: user.email}, privateJWT, {expiresIn: "1h"}, (err, token) => { // gerando token
+          jwt.sign({id: user.id, email: user.email}, process.env.JWT_SECRET, {expiresIn: "1h"}, (err, token) => { // gerando token
               if(err){
                 res.statusCode = 400;
                 res.json({err: "Ocorreu um erro interno"});
