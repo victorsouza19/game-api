@@ -4,6 +4,9 @@ const cors = require("cors");
 const Game = require("./database/Games");
 const User = require("./database/Users");
 const connection = require("./database/database");
+const jwt = require("jsonwebtoken");
+
+const privateJWT = "9fa8c4f8d92e0eb61855";
 
 app.use(cors());
 
@@ -175,7 +178,7 @@ app.put("/game/:id", (req, res) => {
   }
 });
 
-// rota de cadastro de user
+/* rota de cadastro de user
 app.post("/user", (req, res) => {
   const { name, email, password } = req.body;
 
@@ -186,16 +189,47 @@ app.post("/user", (req, res) => {
      res.sendStatus(500);
 
   });
-});
+}); */
 
 // rota de autenticação
 app.post("/auth", (req, res) => {
   const {email, password} = req.body;
 
-  if(email != undefined){
+  if(email != undefined && password != undefined){ // se email e senha forem preenchidos
+    User.findOne({where: {email: email}}).then(user => {
 
-  }else{
-    res.status = (400);
+      if(user != undefined){ // se usuário for encontrado
+
+        if(user.password == password){ // se senhas coincidirem
+
+          jwt.sign({id: user.id, email: user.email}, privateJWT, {expiresIn: "1h"}, (err, token) => { // gerando token
+              if(err){
+                res.statusCode = 400;
+                res.json({err: "Ocorreu um erro interno"});
+
+              }else{
+                res.statusCode = 200;
+                res.json({token: token}); //enviando token
+
+              }
+          });
+
+        } else{ // se senhas não coincidirem
+          res.statusCode = 401;
+          res.json({err: "E-mail ou senha incorretos!"});
+        }
+        
+      } else { // se usuário for encontrado
+        res.statusCode = 404;
+        res.json({err: "E-mail ou senha incorretos!"});
+      }
+
+    }).catch(err => { // se ocorrer um problema na consulta
+      res.sendStatus(500);
+    });
+
+  }else{ // 
+    res.statusCode = 400;
     res.json({err: "E-mail ou senha inválidos!"});
   }
 
