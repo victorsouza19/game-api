@@ -11,7 +11,7 @@
 ![image](https://user-images.githubusercontent.com/71740612/140662178-be873674-054d-40ba-9d55-2e91bfd27935.png)
 > Minha primeira API seguindo a arquitetura REST (:
 
-### Melhorias :construction:
+### :construction: Melhorias
 
 Projeto em desenvolvimento, as próximas atualizações serão:
 
@@ -73,7 +73,7 @@ Iniciar o servidor:
 node index.js
 ```
 
-## :bookmark_tabs: Documentação
+## :books: Documentação
 
 Para visualizar a documentação da API, consulte o arquivo [DOCUMENTAÇÃO](DOCUMENTATION.md).
 
