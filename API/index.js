@@ -32,6 +32,25 @@ connection
     console.log(err);
 });
 
+// rota raiz que indicará qual a rota de login do user
+app.get("/", (req, res) => {
+  let HATEOAS = [
+    {
+      href: "http://localhost:5000/auth",
+      rel: "login",
+      body: {
+        email: "johndoe@email.com",
+        password: "123456"
+      }
+    }
+  ]
+  res.statusCode = 200;
+  res.json({
+    msg: "For use the Game-API, you must be authenticated.",
+    _links: HATEOAS
+  });
+
+});
 // rota de listagem dos games
 app.get("/games", auth, (req, res) => {
 
@@ -49,18 +68,55 @@ app.get("/games", auth, (req, res) => {
 // rota de listagem de UM game
 app.get("/game/:id", auth, (req, res) => {
 
-  
   if(isNaN(req.params.id)){ // se o id não for número
     res.sendStatus(400);
 
   }else{ // senão
     let id = parseInt(req.params.id); 
 
+    let HATEOAS = [
+      {
+        href: `http://localhost:5000/game/${id}`,
+        method: "DELETE",
+        rel: "delete_game"
+      },
+      {
+        href: `http://localhost:5000/game/${id}`,
+        method: "PUT",
+        rel: "edit_game",
+        params:{
+          title: "Game name",
+          year: 2011,
+          price: 100
+        }
+      },
+      {
+        href: `http://localhost:5000/game/${id}`,
+        method: "GET",
+        rel: "get_game"
+      },
+      {
+        href: `http://localhost:5000/game`,
+        method: "POST",
+        rel: "new_game",
+        params:{
+          title: "Game name",
+          year: 2011,
+          price: 100
+        }
+      },
+      {
+        href: `http://localhost:5000/games`,
+        method: "GET",
+        rel: "get_all_games"
+      }
+    ];
+
     Game.findOne({where: {id: id}}).then(game => {
 
       if(game != undefined){ // se o game for encontrado
         res.statusCode = 200;
-        res.json(game);
+        res.json({game, _links: HATEOAS});
   
       }else{ // se não
         res.sendStatus(404);
@@ -91,7 +147,7 @@ app.post("/game", auth, (req, res) => {
       price: price 
 
     }).then(result => {
-        res.sendStatus(200);
+        res.sendStatus(201);
 
       }).catch(err => {
         res.sendStatus(500);
@@ -115,7 +171,7 @@ app.delete("/game/:id", auth, (req, res) => {
       if(result == 0){
         res.sendStatus(404);
       }else{
-        res.sendStatus(200);
+        res.sendStatus(204);
       }
       
 
@@ -181,7 +237,7 @@ app.put("/game/:id", auth, (req, res) => {
         }
       }
 
-      res.sendStatus(200);
+      res.sendStatus(204);
   }
 });
 
@@ -190,7 +246,7 @@ app.post("/user", auth, (req, res) => {
   const { name, email, password } = req.body;
 
   User.create({name, email, password}).then(result => {
-    res.sendStatus(200);
+    res.sendStatus(201);
 
   }).catch(err => {
      res.sendStatus(500);
@@ -211,12 +267,69 @@ app.post("/auth", (req, res) => {
 
           jwt.sign({id: user.id, email: user.email}, process.env.JWT_SECRET, {expiresIn: "1h"}, (err, token) => { // gerando token
               if(err){
-                res.statusCode = 400;
+                res.statusCode = 500;
                 res.json({err: "Ocorreu um erro interno"});
 
               }else{
+                let HATEOAS = [
+                  {
+                    href: `http://localhost:5000/games`,
+                    method: "GET",
+                    rel: "get_all_games"
+                  },
+                  {
+                    href: `http://localhost:5000/game/:id`,
+                    method: "GET",
+                    rel: "get_game"
+                  },
+                  {
+                    href: `http://localhost:5000/game`,
+                    method: "POST",
+                    rel: "new_game",
+                    params:{
+                      title: "Game name",
+                      year: 2011,
+                      price: 100
+                    }
+                  },
+                  {
+                    href: `http://localhost:5000/game/:id`,
+                    method: "PUT",
+                    rel: "edit_game",
+                    params:{
+                      title: "Game name",
+                      year: 2021,
+                      price: 100
+                    }
+                  },
+                  {
+                    href: `http://localhost:5000/game/:id`,
+                    method: "DELETE",
+                    rel: "delete_game"
+                  },
+                  {
+                    href: `http://localhost:5000/user`,
+                    method: "POST",
+                    rel: "new_user",
+                    params:{
+                      name: "John Doe",
+                      email: "johndoe@email.com",
+                      password: "123456"
+                    }
+                  },
+                  {
+                    href: `http://localhost:5000/auth`,
+                    method: "POST",
+                    rel: "login",
+                    params:{
+                      email: "johndoe@email.com",
+                      password: "123456"
+                    }
+                  }
+                ];
+
                 res.statusCode = 200;
-                res.json({token: token}); //enviando token
+                res.json({token, _links: HATEOAS}); //enviando token
 
               }
           });
