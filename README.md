@@ -19,7 +19,8 @@ Projeto em desenvolvimento, as próximas atualizações serão:
 - [x] Criar o front-end da aplicação para consumo da API.
 - [x] Criar um banco de dados real onde a API buscará os dados.
 - [x] Implementar o banco de dados real com o Sequelize.
-- [ ] Criar sistema de autenticação da API
+- [x] Criar sistema de autenticação da API
+- [x] RESTful com HATEOAS.
 - [ ] Implementar melhorias de CSS no front-end
 
 
