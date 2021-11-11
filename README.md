@@ -42,7 +42,7 @@ npm install
 ```
 <br>
 
-Alterar o arquivo ./API/.envExample com os dados do seu banco :
+Alterar o arquivo <code>./API/.envExample</code> com os dados do seu banco :
 ```
 # JWT key:
 JWT_SECRET=secretpwd123
@@ -56,7 +56,7 @@ DB_DIALECT=mysql
 ```
 <br>
 
-Para criar as tabelas, basta descomentar o seguinte trecho nos arquivos ./API/database/(Users.js & Games.js) :
+Para criar as tabelas, basta descomentar o seguinte trecho nos arquivos <code>./API/database/(Users.js & Games.js)</code> :
 ```
 /* Arquivo Users.js */
 User.sync({force: false});  
